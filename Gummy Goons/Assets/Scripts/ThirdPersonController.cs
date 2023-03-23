@@ -23,6 +23,8 @@ namespace StarterAssets
         public float maxTimeRemaining = 15.0f;
         public bool hasKilled = false;
 
+       // private Animation anim;
+
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
 
@@ -32,6 +34,9 @@ namespace StarterAssets
 
         [Tooltip("Acceleration and deceleration")]
         public float SpeedChangeRate = 10.0f;
+
+        public GameObject Sword;
+        SwordController progress = null;
 
         public AudioClip LandingAudioClip;
         public AudioClip[] FootstepAudioClips;
@@ -107,6 +112,7 @@ namespace StarterAssets
         private PlayerInput _playerInput;
 #endif
         private Animator _animator;
+
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
@@ -126,7 +132,10 @@ namespace StarterAssets
 #endif
             }
         }
+        public RuntimeAnimatorController anim1;
+        public RuntimeAnimatorController anim2;
 
+        
 
         private void Awake()
         {
@@ -140,7 +149,7 @@ namespace StarterAssets
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
+            //anim = gameObject.GetComponent<Animation>();
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
@@ -164,10 +173,11 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();            
             Move();
-            DestroyOnDeath();
+            _playerInput.onActionTriggered += PlayerInput_onActionTriggered;
+            //DestroyOnDeath();
 
         }
-
+        private void PlayerInput_onActionTriggered(InputAction.CallbackContext context) { Debug.Log(context); }
         private void LateUpdate()
         {
             CameraRotation();
@@ -177,6 +187,7 @@ namespace StarterAssets
         { 
             if(MoveSpeed == 0)
             {
+                //GameObject.Destroy();
                 GameObject.Destroy(_controller);
                 GameObject.Destroy(_input);
                 GameObject.Destroy(_playerInput);
@@ -322,6 +333,8 @@ namespace StarterAssets
             }
         }
 
+        
+
         private void JumpAndGravity()
         {
             if (Grounded)
@@ -390,7 +403,17 @@ namespace StarterAssets
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
         }
+        private void OnFire()
+        {
+            //anim.Play();    
+            progress = GameObject.Find("Sword Hitbox").GetComponent<SwordController>();
+            Debug.Log("Attack!!!");
+            progress.isAttacking = true;
+            _animator.runtimeAnimatorController = anim1;
+            Debug.Log(JsonUtility.ToJson(_animator.GetCurrentAnimatorStateInfo(0)));
+            //_animator.runtimeAnimatorController = anim2;
 
+        }
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {
             if (lfAngle < -360f) lfAngle += 360f;
