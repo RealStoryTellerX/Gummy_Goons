@@ -32,11 +32,14 @@ public class CamChanger : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter (Collider player)
+    private void OnTriggerEnter (Collider other)
     {
+        if(other.gameObject.tag == "Player")
+        {
         Debug.Log("Cam Change");
         currnetFov = newFov;
         Debug.Log(currnetFov);
         cam.m_Lens.OrthographicSize = currnetFov;
+        }
     }
 }
