@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using System.Collections;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -410,9 +411,19 @@ namespace StarterAssets
             Debug.Log("Attack!!!");
             progress.isAttacking = true;
             _animator.runtimeAnimatorController = anim1;
-            Debug.Log(JsonUtility.ToJson(_animator.GetCurrentAnimatorStateInfo(0)));
+            //Debug.Log(JsonUtility.ToJson(_animator.GetCurrentAnimatorStateInfo(0)));
+            StartCoroutine(Example());
             //_animator.runtimeAnimatorController = anim2;
 
+
+        }
+
+        private IEnumerator Example()
+        {
+            print(Time.time);
+            yield return new WaitForSeconds(0.6f);
+            _animator.runtimeAnimatorController = anim2;
+            print(Time.time);
         }
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {

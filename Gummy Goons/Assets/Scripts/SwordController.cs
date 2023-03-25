@@ -14,6 +14,8 @@ public class SwordController : MonoBehaviour
     public ThirdPersonController progress = null;
     //private PlayerInputActions playerInputActions;
     // Start is called before the first frame update
+    private Animator _animator = null;
+    public RuntimeAnimatorController anim2;
     void Start()
     {
        
@@ -38,7 +40,7 @@ public class SwordController : MonoBehaviour
         if (isAttacking)
         {
             //Debug.Log("Touching Enemy");
-            if (other.gameObject.name == "Enemy") { 
+            if (other.gameObject.tag == "Enemy") { 
                 Debug.Log("Touching Enemy");
                 Destroy(other.gameObject);
                 progress = GameObject.Find("PlayerArmature").GetComponent<ThirdPersonController>();
@@ -46,7 +48,9 @@ public class SwordController : MonoBehaviour
             }
         }
         isAttacking = false;
-    }
+        //_animator = GameObject.Find("PlayerArmature").GetComponent<Animator>();
+        //_animator.runtimeAnimatorController = anim2;
 
-    
+    }
 }
+    
